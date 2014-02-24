@@ -1,0 +1,13 @@
+{
+  "name": "agnite",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "x",
+    "nodemailer": "x",
+    "ws": "x"
+  },
+  "engines": {
+    "node": "x",
+    "npm": "x"
+  }
+}

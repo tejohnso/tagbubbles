@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <title>CanopyTest</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="fonts.css" />
+  <link rel="stylesheet" href="foundation.min.css" />
+  <link rel="stylesheet" href="canopy.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+  <noscript><div><p>This site requires <strong>javascript.</strong></p></div></noscript>
+
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+      <h1>
+        <a href="/"></a>
+      </h1>
+      </li>
+    </ul>
+
+    <section class="top-bar-section">
+      <ul class="right">
+        <li><hr></li>
+        <li><a id="go" href="#" class="button">GO</a></li>
+        <li><hr></li>
+      </ul>
+    </section>
+  </nav>
+
+  <div id="intro" class="panel">
+    <form>
+      <div class="row">
+        <div class="small-12 columns">
+          <label>URL
+            <input id="theurl" type="text" value="http://www.wired.com" />
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="dataTable" class="panel">
+    <div class="row">
+      <div class="small-2 columns">
+        <table>
+          <thead>
+            <tr>
+              <th>TAG</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody">
+          </tbody>
+        </table>
+      </div>
+      <div class="small-10 columns">
+        <div id="dataChart">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="jquery-2.0.3.min.js"></script>
+  <script src="modernizr.js"></script>
+  <script src="foundation.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="canopy.js"></script>
+</body>
+</html>

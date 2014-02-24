@@ -1,0 +1,71 @@
+body {
+  text-align: center;
+  font-family: 'sofia_pro_lightregular', sans;
+  font-size: 1em;
+}
+
+noscript div {
+  position: fixed;
+  width: 100%;
+  padding-top: 1em;
+  top: 0;
+  left: 0;
+  z-index: 999999999;
+  background-color: yellow;
+}
+
+#intro {
+  line-height: 1.2;
+  font-size: 1.3em;
+}
+textarea {
+  height: auto;
+}
+
+.circularBorder {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  -webkit-border-radius: 75px;
+  -moz-border-radius: 75px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#pay {
+  cursor: pointer;
+}
+
+input[type="number"].orderQuantity {
+  max-width: 5em;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.chatResponse {
+  background-color: #cccccc;
+  color: #986c2f;
+  font-weight: bold;
+}
+
+.chatSent {
+  background-color: #bbbbbb;
+  color: black;
+}
+
+a, a:visited, a:active {
+  color: #ff9400;
+}
+
+video {
+  border-style: solid;
+  border-color: #222222;
+  border-width: 5px;
+  border-radius: 10px;
+  background-color: transparent;
+  background-color: rgba(42, 42, 42, 0.5);
+  max-width: 226px;
+  width: 100%;
+}
+
