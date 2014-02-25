@@ -158,10 +158,10 @@ $(document).ready(function() {
 
     node.append('text')
     .attr('text-anchor', 'middle')
-    .text(function(d) { return d.children ? '' : d.name;});
+    .text(function(d) { return d.children || d.r < 20 ? '' : d.name;});
     node.append('text')
     .attr('dy', 20)
     .attr('text-anchor', 'middle')
-    .text(function(d) { return d.children ? '' : d.value;});
+    .text(function(d) { return d.children || d.r < 20 ? '' : d.value;});
   }
 });
