@@ -1,9 +1,10 @@
 $(document).ready(function() {
   $(document).foundation();
-  $(document.forms[0]).on('submit', function() {runit(); return false;});
+  $(document.forms[0]).on('submit', function() { $('#go').click(); return false; });
   $('#go').on('click', runit);
 
   function runit() {
+    setInputDisabled(true);
     tagsList = {};
     $('#dataTableBody').html('');
     $('#dataChart').html('');
@@ -11,10 +12,16 @@ $(document).ready(function() {
       $('#theurl').val('http://' + $('#theurl').val());
     }
 
+    function setInputDisabled(trueOrFalse) {
+      $('#go').prop('disabled', trueOrFalse);
+      $('#theurl').prop('disabled', trueOrFalse);
+    }
+
     $.post('/fetchData', {"url": $('#theurl').val()}, function(data) {
       iterateElements($(data));
       populateTable();
       populateVis();
+      setInputDisabled(false);
     });
 
     function iterateElements(jqElements) {
