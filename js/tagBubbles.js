@@ -38,86 +38,55 @@ $(document).ready(function() {
       });
     }
 
-    function populateVis(data) {
+    function populateVis() {
       var json = {
-        "name": "flare",
+        "name": "bubbles",
         "children": [
-        {
-          "name": "analytics",
-          "children": [
-          {
-            "name": "cluster",
-            "children": [
-            ]
-          },
-          {
-            "name": "graph",
-            "children": [
-            ]
-          }
-          ]
-        }
         ]
       };
 
       Object.keys(tagsList).map(function(val, idx, arr) {
-        var newBubble = {"name": val + ' - ' + tagsList[val], "size": tagsList[val]};
-        json.children[0].children[0].children.push(newBubble);
+        var newBubble = {"name": val, "value": tagsList[val]};
+        json.children.push(newBubble);
       });
 
-      var r = $('#dataChart').width(),
-          format = d3.format(",d"),
-          fill = d3.scale.category20c();
+      var width = $('#dataChart').width();
+      var height = $('#dataChart').width();
 
-      var bubble = d3.layout.pack()
-        .sort(null)
-        .size([r, r])
+      var canvas = d3.select('#dataChart').append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transofrm', 'translate(50, 50');
+
+      var pack = d3.layout.pack()
+        .size([width, height])
         .padding(1.5);
 
-      var vis = d3.select("#dataChart").append("svg")
-        .attr("width", r)
-        .attr("height", r)
-        .attr("class", "bubble");
+      var nodes = pack.nodes(json);
 
+      var node = canvas.selectAll('.node')
+      .data(nodes)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+      node.append('circle')
+      .attr('r', function(d) {return d.r;})
+      .attr('fill', function(d) { return d.children ? '#fff' : "0000FF"; })
+      .attr('opacity', 0.25)
+      .attr('stroke', function(d) {return d.children ? '#fff' : '#0088FF' })
+      .attr('stroke-width', '2');
 
-      var node = vis.selectAll("g.node")
-        .data(bubble.nodes(classes(json))
-            .filter(function(d) { return !d.children; }))
-        .enter().append("g")
-        .attr("class", "node")
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      node.append('text')
+      .attr('text-anchor', 'middle')
+      .text(function(d) { return d.children ? '' : d.name;});
+      node.append('text')
+      .attr('dy', 20)
+      .attr('text-anchor', 'middle')
+      .text(function(d) { return d.children ? '' : d.value;});
+  }
 
-      node.append("title")
-        .text(function(d) { return d.className + ": " + format(d.value); });
-
-      node.append("circle")
-        .attr("r", function(d) { return d.r; })
-        .style("fill", function(d) { return fill(d.packageName); });
-      node.append("text")
-        .attr("text-anchor", "middle")
-        .attr("dy", ".3em")
-        .text(function(d) { return d.className.substring(0, d.r / 3); });
-
-      // Returns a flattened hierarchy containing all leaf nodes under the root.
-
-      function classes(root) {
-        var classes = [];
-
-        function recurse(name, node) {
-          if (node.children) {
-            node.children.forEach(function(child) {
-              recurse(node.name, child);
-            });
-          }
-          else {
-            classes.push({packageName: name, className: node.name, value: node.size});
-          }
-        }
-        recurse(null, root);
-        return {children: classes};
-      }
-    }
-
-    return false;
-  };
+  return false;
+};
 });
