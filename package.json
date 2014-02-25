@@ -2,7 +2,7 @@
   "name": "tagbubbles",
   "version": "0.0.1",
   "dependencies": {
-    "express": "x",
+    "express": "x"
   },
   "engines": {
     "node": "x",
