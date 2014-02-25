@@ -1,19 +1,29 @@
 $(document).ready(function() {
-  $(document).on('replace', function() {
+  var tagsList, tagsArray;
+
+  $(document).on('replace', reloadDynamicHTML);
+
+  function reloadDynamicHTML() {
     $(document).foundation($('#dataTable'));
-    if ($('dl').length > 0) {$('#dataChart').width($('dl').width());}
-    $('#tagHeader').on('click', function() {sortTags(); populateTable()});
-    $('#countHeader').on('click', function() {sortCounts(); populateTable();});
-    $('#dataChart').on('mouseover', 'circle', function(event) {highlightRow(event);});
-    $('#dataChart').on('click', 'circle', $('#dataChart').trigger('mouseover'));
-  });
+    if (hasSmallScreenComponents()) {$('#dataChart').width($('dl').width());}
+    setEventHandlers();
+
+    function hasSmallScreenComponents() {
+      return ($('dl').length > 0);
+    }
+
+    function setEventHandlers() {
+      $('#tagHeader').on('click', function() {sortTags(); populateTable()});
+      $('#countHeader').on('click', function() {sortCounts(); populateTable();});
+      $('#dataChart').on('mouseover', 'circle', function(event) {highlightRow(event);});
+      $('#dataChart').on('click', 'circle', $('#dataChart').trigger('mouseover'));
+    }
+  }
 
   $(document).foundation();
   $(document.forms[0]).on('submit', function() { $('#go').click(); return false; });
   $('#go').on('click', reload);
   $('#theurl').focus();
-
-  var tagsList, tagsArray;
 
   function reload() {
     if ($('#theurl').val() === '') {return;}
@@ -37,23 +47,17 @@ $(document).ready(function() {
     }
 
     $.post('/fetchData', {"url": $('#theurl').val()}, function(data) {
-      iterateHTMLData($(data));
+      iterateHTMLData(data.match(/<[a-z]+[0-9]?/ig));
       toggleInputDisabled();
       defer.resolve();
     });
 
-    function iterateHTMLData(jqElements) {
-      jqElements.each(function(idx, el) {
-        if ($(el).children().length > 0) {iterateHTMLData($(el).children());}
-        if ($(el).prop('tagName')) {
-          incrementTagCount($(el).prop('tagName'));
-        }
+    function iterateHTMLData(elements) {
+      elements.forEach(function(val, idx, arr) {
+        var tag = val.substr(1).toUpperCase();
+        tagsList.hasOwnProperty(tag) ? tagsList[tag] = tagsList[tag] + 1 :
+                                       tagsList[tag] = 1;
       });
-    }
-
-    function incrementTagCount(tagName) {
-      tagsList.hasOwnProperty(tagName) ? tagsList[tagName] = tagsList[tagName] + 1 :
-                                         tagsList[tagName] = 1;
     }
 
     function toggleInputDisabled() {
