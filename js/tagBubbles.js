@@ -1,15 +1,22 @@
 $(document).ready(function() {
+  $(document).on('replace', function() {
+    $(document).foundation($('#dataTable'));
+    if ($('dl').length > 0) {$('#dataChart').width($('dl').width());}
+    $('#tagHeader').on('click', function() {sortTags(); populateTable()});
+    $('#countHeader').on('click', function() {sortCounts(); populateTable();});
+    $('#dataChart').on('mouseover', 'circle', function(event) {highlightRow(event);});
+    $('#dataChart').on('click', 'circle', $('#dataChart').trigger('mouseover'));
+  });
+
   $(document).foundation();
   $(document.forms[0]).on('submit', function() { $('#go').click(); return false; });
   $('#go').on('click', reload);
-  $('#tagHeader').on('click', function() {sortTags(); populateTable()});
-  $('#countHeader').on('click', function() {sortCounts(); populateTable();});
-  $('#dataChart').on('mouseover', 'circle', function(event) {highlightRow(event);});
   $('#theurl').focus();
 
   var tagsList, tagsArray;
 
   function reload() {
+    if ($('#theurl').val() === '') {return;}
     $('#countHeader').html('Count');
     $('#tagHeader').html('TAG');
     $.when(populateTagCountsFromURL()).done(function() {

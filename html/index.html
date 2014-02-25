@@ -35,28 +35,9 @@
     </form>
   </div>
 
-  <div id="dataTable" class="panel">
-    <div class="row">
-      <div class="small-2 columns">
-        <table>
-          <thead>
-            <tr>
-              <th id="tagHeader">TAG</th>
-              <th id="countHeader">Count</th>
-            </tr>
-          </thead>
-          <tbody id="dataTableBody">
-          </tbody>
-        </table>
-      </div>
-      <div class="small-10 columns">
-        <div id="dataChart">
-        </div>
-      </div>
-    </div>
-  </div>
-
-
+  <div data-interchange="[dataSmall.html, (only screen and (min-width: 1px))],
+                         [dataLarge.html, (only screen and (min-width: 900px))]">
+                         
   <script src="jquery-2.0.3.min.js"></script>
   <script src="modernizr.js"></script>
   <script src="foundation.min.js"></script>
