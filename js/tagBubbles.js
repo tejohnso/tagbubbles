@@ -1,45 +1,43 @@
 $(document).ready(function() {
   $(document).foundation();
   $(document.forms[0]).on('submit', function() { $('#go').click(); return false; });
-  $('#go').on('click', runit);
-  $('#tagHeader').on('click', reSortTags);
-  $('#countHeader').on('click', reSortCounts);
+  $('#go').on('click', reload);
+  $('#tagHeader').on('click', function() {sortTags(); populateTable()});
+  $('#countHeader').on('click', function() {sortCounts(); populateTable();});
   $('#dataChart').on('mouseover', 'circle', function(event) {highlightRow(event);});
   $('#theurl').focus();
 
   var tagsList, tagsArray;
 
-  function runit() {
-    tagsList = {};
-    tagsArray = [];
-    setInputDisabled(true);
-    if ($('#theurl').val().substr(0,4) !== 'http') {
-      $('#theurl').val('http://' + $('#theurl').val());
-    }
-
-    function setInputDisabled(trueOrFalse) {
-      $('#go').prop('disabled', trueOrFalse);
-      $('#theurl').prop('disabled', trueOrFalse);
-    }
-
-    $.post('/fetchData', {"url": $('#theurl').val()}, function(data) {
-      iterateHTMLElements($(data));
+  function reload() {
+    $('#countHeader').html('Count');
+    $('#tagHeader').html('TAG');
+    $.when(populateTagCountsFromURL()).done(function() {
       setTagsArray();
       sortCounts();
       populateTable();
       populateVis();
-      setInputDisabled(false);
     });
+    return false;
+  }
 
-    function setTagsArray() {
-      Object.keys(tagsList).forEach(function(val, idx, arr) {
-        tagsArray.push([val, tagsList[val]]);
-      });
+  function populateTagCountsFromURL() {
+    var defer = jQuery.Deferred();
+    tagsList = {};
+    toggleInputDisabled();
+    if ($('#theurl').val().substr(0,4) !== 'http') {
+      $('#theurl').val('http://' + $('#theurl').val());
     }
 
-    function iterateHTMLElements(jqElements) {
+    $.post('/fetchData', {"url": $('#theurl').val()}, function(data) {
+      iterateHTMLData($(data));
+      toggleInputDisabled();
+      defer.resolve();
+    });
+
+    function iterateHTMLData(jqElements) {
       jqElements.each(function(idx, el) {
-        if ($(el).children().length > 0) {iterateHTMLElements($(el).children());}
+        if ($(el).children().length > 0) {iterateHTMLData($(el).children());}
         if ($(el).prop('tagName')) {
           incrementTagCount($(el).prop('tagName'));
         }
@@ -51,22 +49,18 @@ $(document).ready(function() {
                                          tagsList[tagName] = 1;
     }
 
-    return false;
-  };
+    function toggleInputDisabled() {
+      var currentlyDisabled = $('#go').prop('disabled');
+      $('#go, #theurl').prop('disabled', currentlyDisabled ? false : true); 
+    }
 
-  function highlightRow(e) {
-    var tag = $(e.target).next().html();
-    $('#dataTableBody').find('td').removeClass('highlight');
-    $('#dataTableBody').find('td').each(function(idx,el) {
-      if ($(this).html() === tag) {$(this).addClass('highlight');}
-    });
+    return defer.promise();
   }
 
-  function populateTable() {
-    $('#dataTableBody').html('');
-    tagsArray.forEach(function(val, idx, arr) {
-      $('#dataTableBody').append($('<tr><td>' + 
-          val[0] + '</td><td>' + val[1] + '</td></tr>'));
+  function setTagsArray() {
+    tagsArray = [];
+    Object.keys(tagsList).forEach(function(val, idx, arr) {
+      tagsArray.push([val, tagsList[val]]);
     });
   }
 
@@ -82,11 +76,6 @@ $(document).ready(function() {
     }
   }
 
-  function reSortCounts() {
-    sortCounts();
-    populateTable();
-  }
-
   function sortTags() {
     if ($('#tagHeader').html().substr(5, 1) === '-') {
       tagsArray.sort(function(a, b) { return (b[0] > a[0] ? 1 : -1); });
@@ -99,9 +88,20 @@ $(document).ready(function() {
     }
   }
 
-  function reSortTags() {
-    sortTags();
-    populateTable();
+  function populateTable() {
+    $('#dataTableBody').html('');
+    tagsArray.forEach(function(val, idx, arr) {
+      $('#dataTableBody').append($('<tr><td>' + 
+          val[0] + '</td><td>' + val[1] + '</td></tr>'));
+    });
+  }
+
+  function highlightRow(e) {
+    var tag = $(e.target).next().html();
+    $('#dataTableBody').find('td').removeClass('highlight');
+    $('#dataTableBody').find('td').each(function(idx,el) {
+      if ($(this).html() === tag) {$(this).addClass('highlight');}
+    });
   }
 
   function populateVis() {
