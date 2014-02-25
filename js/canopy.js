@@ -5,8 +5,13 @@ $(document).ready(function() {
 
   function runit() {
     tagsList = {};
+    $('#dataTableBody').html('');
+    $('#dataChart').html('');
+    if ($('#theurl').val().substr(0,4) !== 'http') {
+      $('#theurl').val('http://' + $('#theurl').val());
+    }
 
-    $.get($('#theurl').val(), function(data) {
+    $.post('/fetchData', {"url": $('#theurl').val()}, function(data) {
       iterateElements($(data));
       populateTable();
       populateVis();
@@ -56,7 +61,7 @@ $(document).ready(function() {
       };
 
       Object.keys(tagsList).map(function(val, idx, arr) {
-        var newBubble = {"name": val + '\n' + tagsList[val], "size": tagsList[val]};
+        var newBubble = {"name": val + ' - ' + tagsList[val], "size": tagsList[val]};
         json.children[0].children[0].children.push(newBubble);
       });
 
