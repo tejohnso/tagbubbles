@@ -1,5 +1,5 @@
 "use strict";
-casper.test.begin('Default submission.', 2, function suite(test) {
+casper.test.begin('Default submission.', 3, function suite(test) {
   casper.start("http://localhost:3000", function(response) {
     this.echo('Connect response is: ' + response.statusText);
   });
@@ -19,6 +19,9 @@ casper.test.begin('Default submission.', 2, function suite(test) {
   );
 
   casper.then(function() {
+    test.assertEval(function() {
+      return document.getElementById('dataTableBody').children.length === 0;
+    }, "No old table data exists.");
     this.sendKeys('#theurl', '\n');
     this.echo('Data has request has been sent to default url.', "INFO");
   });
@@ -36,8 +39,8 @@ casper.test.begin('Default submission.', 2, function suite(test) {
 
   casper.then(function() {
     test.assertEval(function() {
-      return document.getElementById('dataTableBody').children.length > 9;
-    }, "At least ten html tags were found.");
+      return document.getElementById('dataTableBody').children.length > 1;
+    }, "At least two html tags were found.");
   });
 
   casper.run(function() {
