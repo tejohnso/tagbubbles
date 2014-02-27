@@ -1,7 +1,8 @@
-var express = require('express');
-var http = require('http');
-var https = require('https');
-var app = express();
+"use strict";
+var express = require('express')
+   ,http = require('http')
+   ,https = require('https')
+   ,app = express();
 
 app.use(express.compress());
 app.use(express.static(__dirname + '/css'));
@@ -35,6 +36,6 @@ app.post('/fetchData', function(req, res) {
   }
 });
 
-var svr = app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 3000, function() {
   console.log('Node web server started');
 });

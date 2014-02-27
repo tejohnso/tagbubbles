@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  "use strict";
   var tagsList, tagsArray;
 
   $(document).on('replace', reloadDynamicHTML);
@@ -13,7 +14,7 @@ $(document).ready(function() {
     }
 
     function setEventHandlers() {
-      $('#tagHeader').on('click', function() {sortTags(); populateTable()});
+      $('#tagHeader').on('click', function() {sortTags(); populateTable();});
       $('#countHeader').on('click', function() {sortCounts(); populateTable();});
       $('#dataChart').on('mouseover', 'circle', function(event) {highlightRow(event);});
       $('#dataChart').on('click', 'circle', $('#dataChart').trigger('mouseover'));
@@ -53,7 +54,7 @@ $(document).ready(function() {
     });
 
     function iterateHTMLData(elements) {
-      elements.forEach(function(val, idx, arr) {
+      elements.forEach(function(val) {
         var tag = val.substr(1).toUpperCase();
         tagsList.hasOwnProperty(tag) ? tagsList[tag] = tagsList[tag] + 1 :
                                        tagsList[tag] = 1;
@@ -62,7 +63,7 @@ $(document).ready(function() {
 
     function toggleInputDisabled() {
       var currentlyDisabled = $('#go').prop('disabled');
-      $('#go, #theurl').prop('disabled', currentlyDisabled ? false : true); 
+      $('#go, #theurl').prop('disabled', currentlyDisabled ? false : true);
     }
 
     return defer.promise();
@@ -70,7 +71,7 @@ $(document).ready(function() {
 
   function setTagsArray() {
     tagsArray = [];
-    Object.keys(tagsList).forEach(function(val, idx, arr) {
+    Object.keys(tagsList).forEach(function(val) {
       tagsArray.push([val, tagsList[val]]);
     });
   }
@@ -101,8 +102,8 @@ $(document).ready(function() {
 
   function populateTable() {
     $('#dataTableBody').html('');
-    tagsArray.forEach(function(val, idx, arr) {
-      $('#dataTableBody').append($('<tr><td>' + 
+    tagsArray.forEach(function(val) {
+      $('#dataTableBody').append($('<tr><td>' +
           val[0] + '</td><td>' + val[1] + '</td></tr>'));
     });
   }
@@ -110,7 +111,7 @@ $(document).ready(function() {
   function highlightRow(e) {
     var tag = $(e.target).next().html();
     $('#dataTableBody').find('td').removeClass('highlight');
-    $('#dataTableBody').find('td').each(function(idx,el) {
+    $('#dataTableBody').find('td').each(function() {
       if ($(this).html() === tag) {$(this).addClass('highlight');}
     });
   }
@@ -123,7 +124,7 @@ $(document).ready(function() {
       ]
     };
 
-    Object.keys(tagsList).map(function(val, idx, arr) {
+    Object.keys(tagsList).map(function(val) {
       var newBubble = {"name": val, "value": tagsList[val]};
       json.children.push(newBubble);
     });
@@ -148,12 +149,12 @@ $(document).ready(function() {
     .enter()
     .append('g')
     .attr('class', 'node')
-    .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+    .attr('transform', function(d) {return 'translate(' + d.x + ',' + d.y + ')';});
     node.append('circle')
     .attr('r', function(d) {return d.r;})
-    .attr('fill', function(d) { return d.children ? '#fff' : "0000FF"; })
+    .attr('fill', function(d) {return d.children ? '#fff' : "0000FF";})
     .attr('opacity', 0.25)
-    .attr('stroke', function(d) {return d.children ? '#fff' : '#0088FF' })
+    .attr('stroke', function(d) {return d.children ? '#fff' : '#0088FF';})
     .attr('stroke-width', '2');
 
     node.append('text')
