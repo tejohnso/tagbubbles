@@ -1,7 +1,7 @@
 "use strict";
 casper.test.begin('Default submission.', 2, function suite(test) {
   casper.start("http://localhost:3000", function(response) {
-    this.echo('Connect response is: ' + response.statusText, "INFO");
+    this.echo('Connect response is: ' + response.statusText);
   });
 
   casper.waitForSelector('input[name="theurl"]',
@@ -13,6 +13,7 @@ casper.test.begin('Default submission.', 2, function suite(test) {
     },
     function() {
       this.echo("The input field named 'theurl' was not found.", "ERROR");
+      test.done();
     },
     1500
   );
@@ -22,9 +23,16 @@ casper.test.begin('Default submission.', 2, function suite(test) {
     this.echo('Data has request has been sent to default url.', "INFO");
   });
 
-  casper.waitWhileSelector('#theurl[disabled]', function() {
-    this.echo('Data request has returned.', "INFO");
-  });
+  casper.waitWhileSelector('#theurl[disabled]',
+    function() {
+      this.echo('Data request has returned.', "INFO");
+    },
+    function() {
+      this.echo('Data request did not return.', "ERROR");
+      test.done();
+    },
+    5000
+  );
 
   casper.then(function() {
     test.assertEval(function() {

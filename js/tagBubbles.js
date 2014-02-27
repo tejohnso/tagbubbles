@@ -54,6 +54,7 @@ $(document).ready(function() {
     });
 
     function iterateHTMLData(elements) {
+      if (!elements) {return;}
       elements.forEach(function(val) {
         var tag = val.substr(1).toUpperCase();
         tagsList.hasOwnProperty(tag) ? tagsList[tag] = tagsList[tag] + 1 :
@@ -118,6 +119,7 @@ $(document).ready(function() {
 
   function populateVis() {
     $('#dataChart').html('');
+    if (Object.keys(tagsList).length === 0) {return;}
     var json = {
       "name": "bubbles",
       "children": [

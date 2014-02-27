@@ -1,16 +1,26 @@
-##tagbubbles
+#tagbubbles
 
-This will fetch a url from a server-side client request and create a list of elements and a count indicating how many times each element was found.  Visualization is then performed using D3
+This will fetch html from a url via server-side client request using
+[Node.js](http://nodejs.org).
 
-```JavaScript
+A list of the retrieved html tag occurences will be shown in tabular and visual format.
+Visualization is implemented using [D3.js](http://d3js.org).
+
+###Installation
+
+```
 npm install
 node web.js
 ```
 
-browse to localhost:3000
+then browse to localhost:3000
 
-#testing
-```JavaScript
+###Tests
+```
 casperjs test tests/
 ```
-
+The tests will confirm:
+- local http connection response
+- input field is present
+- input field has default focus on page load
+- a number of different html tags are found

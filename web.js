@@ -18,10 +18,13 @@ app.post('/fetchData', function(req, res) {
   fetchURL(req.body.url);
 
   function fetchURL(url) {
-    var siteContents = '', protocol = url.substr(0,5) === 'https' ? https : http;
-    console.log('Attempting fetch from: ' + url);
+    var siteContents = ''
+        ,fetchReq
+        ,protocol = url.substr(0,5) === 'https' ? https : http;
 
-    protocol.get(url, function(fetchRes) {
+    console.log('Attempting fetch from: ' + url);
+    
+    fetchReq = protocol.get(url, function(fetchRes) {
       fetchRes.on('data', function(chunk) {
         siteContents += chunk;
       });
@@ -32,6 +35,11 @@ app.post('/fetchData', function(req, res) {
         }
         res.end(siteContents);
       });
+    });
+
+    fetchReq.on('error', function(e) {
+      console.error('Error fetching data: ' + e.message);
+      res.end();
     });
   }
 });
