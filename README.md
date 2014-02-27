@@ -8,3 +8,9 @@ node web.js
 ```
 
 browse to localhost:3000
+
+#testing
+```JavaScript
+casperjs test tests/
+```
+
