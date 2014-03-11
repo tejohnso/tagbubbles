@@ -48,7 +48,7 @@ $(document).ready(function() {
     }
 
     $.post('/fetchData', {"url": $('#theurl').val()}, function(data) {
-      iterateHTMLData(data.match(/<[a-z]+[0-9]?/ig));
+      iterateHTMLData(data.split('\n'));
       toggleInputDisabled();
       defer.resolve();
     });
@@ -56,7 +56,7 @@ $(document).ready(function() {
     function iterateHTMLData(elements) {
       if (!elements) {return;}
       elements.forEach(function(val) {
-        var tag = val.substr(1).toUpperCase();
+        var tag = val;
         tagsList.hasOwnProperty(tag) ? tagsList[tag] = tagsList[tag] + 1 :
                                        tagsList[tag] = 1;
       });
